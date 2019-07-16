@@ -45,7 +45,7 @@ class Scratch3FaceDetectionBlocks {
         this.position_y = 0;
 
         const that = this;
-        this.socket = io('http://localhost:3000/');
+        this.socket = io('http://192.168.2.144:3000/');
         this.socket.on('detection', function (msg) {
             if (typeof(msg) === 'string') {
                 msg = JSON.parse(msg);

@@ -42,6 +42,8 @@ class Scratch3FaceDetectionBlocks {
         this.runtime = runtime;
 
         this.position_x = 0;
+        this.position_y = 0;
+
         const that = this;
         this.socket = io('http://localhost:3000/');
         this.socket.on('detection', function (msg) {
@@ -51,7 +53,8 @@ class Scratch3FaceDetectionBlocks {
 
             if (msg && msg.detection && msg.detection._box)
             {
-                that.position_x = msg.detection._box._x - 250;
+                that.position_x = -((msg.detection._box._x - 230)* 0.85 );
+                that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
             }
         });
     }
@@ -67,15 +70,26 @@ class Scratch3FaceDetectionBlocks {
             showStatusButton: true,
             blocks: [
                 {
-                    opcode: 'position',
+                    opcode: 'positionX',
                     text: formatMessage({
-                        id: 'faceDetection.position',
-                        default: 'Face Detection position',
+                        id: 'faceDetection.positionX',
+                        default: 'Face Detection positionX',
+                        description: 'position of the detected face'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'positionY',
+                    text: formatMessage({
+                        id: 'faceDetection.positionY',
+                        default: 'Face Detection positionY',
                         description: 'position of the detected face'
                     }),
                     blockType: BlockType.REPORTER,
                 }
             ]
+
+            
         };
     }
 
@@ -84,8 +98,12 @@ class Scratch3FaceDetectionBlocks {
      * @param {object} args - the block's arguments.
      * @return {boolean} - true if the button is pressed.
      */
-    position(args) {
+    positionX(args) {
         return this.position_x;
+    }
+
+    positionY(args) {
+        return this.position_y;
     }
 }
 

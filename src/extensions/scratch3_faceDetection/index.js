@@ -1,3 +1,4 @@
+module.exports = Scratch3FaceDetectionBlocks;
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
 const log = require('../../util/log');
@@ -19,14 +20,14 @@ class Scratch3FaceDetectionBlocks {
     /**
      * @return {string} - the name of this extension.
      */
-    static get EXTENSION_NAME () {
+    static get EXTENSION_NAME() {
         return 'Face-Detection';
     }
 
     /**
      * @return {string} - the ID of this extension.
      */
-    static get EXTENSION_ID () {
+    static get EXTENSION_ID() {
         return 'faceDetection';
     }
 
@@ -34,27 +35,56 @@ class Scratch3FaceDetectionBlocks {
      * Construct a set of MicroBit blocks.
      * @param {Runtime} runtime - the Scratch 3.0 runtime.
      */
-    constructor (runtime) {
+    constructor(runtime) {
         /**
          * The Scratch 3.0 runtime.
          * @type {Runtime}
          */
         this.runtime = runtime;
 
-        this.position_x = 0;
-        this.position_y = 0;
+        this.position_x_1 = 0;
+        this.position_y_1 = 0;
+
+        this.position_x_2 = 0;
+        this.position_y_2 = 0;
+
+        this.expressions_angry = 0;
+        this.expressions_disgusted = 0;
+        this.expressions_fearful = 0;
+        this.expressions_sad = 0;
+        this.expressions_happy = 0;
+        this.expressions_neutral = 0;
+        this.expressions_surprised = 0;
+
 
         const that = this;
-        this.socket = io('http://192.168.2.144:3000/');
+        this.socket = io('http://localhost:3000/');
         this.socket.on('detection', function (msg) {
-            if (typeof(msg) === 'string') {
+            if (typeof (msg) === 'string') {
                 msg = JSON.parse(msg);
             }
+            console.log('uhawlök');
+            if (msg && msg.detection && msg.detection._box && msg.player) {
+  
+                  //that.position_x = -((msg.detection._box._x - 230) * 0.85);
+                  //that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
 
-            if (msg && msg.detection && msg.detection._box)
-            {
-                that.position_x = -((msg.detection._box._x - 230)* 0.85 );
-                that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
+                if (msg.player === 1) {
+                    that.position_x_1 = msg.detection._box._x;
+                    that.position_y_1 = msg.detection._box._y;
+                }   else {
+                    that.position_x_2 = msg.detection._box._x;
+                    that.position_y_2 = msg.detection._box._y;
+                }
+                that.expressions_angry = msg.expressions.angry;
+                that.expressions_disgusted = msg.expressions.disgusted;
+                that.expressions_fearful = msg.expressions.fearful;
+                that.expressions_sad = msg.expressions.sad;
+                that.expressions_neutral = msg.expressions.neutral;
+                that.expressions_happy = msg.expressions.happy;
+                that.expressions_surprised = msg.expressions.surprised;
+                console.log(msg.expressions.neutral);
+
             }
         });
     }
@@ -62,34 +92,96 @@ class Scratch3FaceDetectionBlocks {
     /**
      * @returns {object} metadata for this extension and its blocks.
      */
-    getInfo () {
+    getInfo() {
         return {
             id: Scratch3FaceDetectionBlocks.EXTENSION_ID,
             name: Scratch3FaceDetectionBlocks.EXTENSION_NAME,
             blockIconURI: blockIconURI,
             showStatusButton: true,
             blocks: [
-                {
-                    opcode: 'positionX',
+                 {
+                     opcode: 'x1',
+                     text: formatMessage({
+                         id: 'faceDetection.position_x_1',
+                         default: 'Face Detection position_x_1',
+                         description: 'x-position of the detected face with the id = 1'
+                     }),
+                     blockType: BlockType.REPORTER,
+                 },
+                 {
+                     opcode: 'y1',
+                     text: formatMessage({
+                         id: 'faceDetection.position_y_1',
+                         default: 'Face Detection position_y_1',
+                         description: 'y-position of the detected face with the id = 1'
+                     }),
+                     blockType: BlockType.REPORTER,
+                 },
+ 
+                 {
+                     opcode: 'angry',
+                     text: formatMessage({
+                         id: 'faceDetection.expressions_angry',
+                         default: 'Angry',
+                         description: 'Angry'
+                     }),
+                     blockType: BlockType.REPORTER,
+                 },
+                 {
+                    opcode: 'disgusted',
                     text: formatMessage({
-                        id: 'faceDetection.positionX',
-                        default: 'Face Detection positionX',
-                        description: 'position of the detected face'
+                        id: 'faceDetection.expressions_disgusted',
+                        default: 'Disgusted',
+                        description: 'Disgusted'
                     }),
                     blockType: BlockType.REPORTER,
                 },
                 {
-                    opcode: 'positionY',
+                    opcode: 'fearful',
                     text: formatMessage({
-                        id: 'faceDetection.positionY',
-                        default: 'Face Detection positionY',
-                        description: 'position of the detected face'
+                        id: 'faceDetection.expressions_fearful',
+                        default: 'Fearful',
+                        description: 'Fearful'
                     }),
                     blockType: BlockType.REPORTER,
-                }
+                },
+                {
+                    opcode: 'happy',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_happy',
+                        default: 'Happy',
+                        description: 'Happy'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'neutral',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_neutral',
+                        default: 'Neutral',
+                        description: 'Neutral'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'sad',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_sad',
+                        default: 'Sad',
+                        description: 'Sad'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'surprised',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_surprised',
+                        default: 'Surprised',
+                        description: 'Surprised'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
             ]
-
-            
         };
     }
 
@@ -98,12 +190,39 @@ class Scratch3FaceDetectionBlocks {
      * @param {object} args - the block's arguments.
      * @return {boolean} - true if the button is pressed.
      */
-    positionX(args) {
-        return this.position_x;
+    x1(args){
+        return this.position_x_1;
     }
-
-    positionY(args) {
-        return this.position_y;
+    y1(args){
+        return this.position_y_1;
+    }
+    
+    x2(args){
+        return this.position_x_2;
+    }
+    y2(args){
+        return this.position_y_2;
+    }
+    angry(args){
+        return this.expressions_angry;
+    }
+    disgusted(args){
+        return this.expressions_disgusted;
+    }
+    fearful(args){
+        return this.expressions_fearful;
+    }
+    sad(args){
+        return this.expressions_sad;
+    }
+    happy(args){
+        return this.expressions_happy;
+    }
+    neutral(args){
+        return this.expressions_neutral;
+    }
+    surprised(args){
+        return this.expressions_surprised;
     }
 }
 

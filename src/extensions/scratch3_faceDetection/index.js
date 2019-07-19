@@ -50,13 +50,14 @@ class Scratch3FaceDetectionBlocks {
         this.position_x_2 = 0;
         this.position_y_2 = 0;
 
-        this.expressions_angry = 0;
-        this.expressions_disgusted = 0;
-        this.expressions_fearful = 0;
-        this.expressions_sad = 0;
-        this.expressions_happy = 0;
-        this.expressions_neutral = 0;
-        this.expressions_surprised = 0;
+        //this.expressions_angry = 0;
+        //this.expressions_disgusted = 0;
+        //this.expressions_fearful = 0;
+        //this.expressions_sad = 0;
+        this.expressions_happy1 = 0;
+        this.expressions_happy2 = 0;
+        //this.expressions_neutral = 0;
+        //this.expressions_surprised = 0;
 
 
         const that = this;
@@ -74,17 +75,20 @@ class Scratch3FaceDetectionBlocks {
                 if (msg.player === 1) {
                     that.position_x_1 = msg.detection._box._x;
                     that.position_y_1 = msg.detection._box._y;
+                    that.expressions_happy1 = msg.expressions.happy;
                 }   else {
                     that.position_x_2 = msg.detection._box._x;
                     that.position_y_2 = msg.detection._box._y;
+                    that.expressions_happy2 = msg.expressions.happy;
                 }
-                that.expressions_angry = msg.expressions.angry;
-                that.expressions_disgusted = msg.expressions.disgusted;
-                that.expressions_fearful = msg.expressions.fearful;
-                that.expressions_sad = msg.expressions.sad;
-                that.expressions_neutral = msg.expressions.neutral;
-                that.expressions_happy = msg.expressions.happy;
-                that.expressions_surprised = msg.expressions.surprised;
+                //that.expressions_angry = msg.expressions.angry;
+                //that.expressions_disgusted = msg.expressions.disgusted;
+                //that.expressions_fearful = msg.expressions.fearful;
+                //that.expressions_sad = msg.expressions.sad;
+                //that.expressions_neutral = msg.expressions.neutral;
+                
+                
+                //that.expressions_surprised = msg.expressions.surprised;
                 console.log(msg.expressions.neutral);
 
             }
@@ -155,8 +159,26 @@ class Scratch3FaceDetectionBlocks {
                     }),
                     blockType: BlockType.REPORTER,
                 },
+                {
+                    opcode: 'happy1',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_happy1',
+                        default: 'Happy1',
+                        description: 'Happy'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'happy2',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_happy2',
+                        default: 'Happy2',
+                        description: 'Happy'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
  
-                 {
+                 /*{
                      opcode: 'angry',
                      text: formatMessage({
                          id: 'faceDetection.expressions_angry',
@@ -183,15 +205,7 @@ class Scratch3FaceDetectionBlocks {
                     }),
                     blockType: BlockType.REPORTER,
                 },
-                {
-                    opcode: 'happy',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_happy',
-                        default: 'Happy',
-                        description: 'Happy'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
+                
                 {
                     opcode: 'neutral',
                     text: formatMessage({
@@ -218,7 +232,7 @@ class Scratch3FaceDetectionBlocks {
                         description: 'Surprised'
                     }),
                     blockType: BlockType.REPORTER,
-                },
+                },*/
             ]
         };
     }
@@ -247,7 +261,13 @@ class Scratch3FaceDetectionBlocks {
     y2(args){
         return this.position_y_2;
     }
-    angry(args){
+    happy1(args){
+        return this.expressions_happy1;
+    }
+    happy2(args){
+        return this.expressions_happy2;
+    }
+    /*angry(args){
         return this.expressions_angry;
     }
     disgusted(args){
@@ -259,15 +279,13 @@ class Scratch3FaceDetectionBlocks {
     sad(args){
         return this.expressions_sad;
     }
-    happy(args){
-        return this.expressions_happy;
-    }
+    
     neutral(args){
         return this.expressions_neutral;
     }
     surprised(args){
         return this.expressions_surprised;
-    }
+    }*/
 }
 
 module.exports = Scratch3FaceDetectionBlocks;

@@ -42,13 +42,13 @@ class Scratch3FaceDetectionBlocks {
          */
         this.runtime = runtime;
 
-        this.position_x = 0;
-        this.position_y = 0;
         this.position_x_1 = 0;
         this.position_y_1 = 0;
+        
 
         this.position_x_2 = 0;
         this.position_y_2 = 0;
+
 
         //this.expressions_angry = 0;
         //this.expressions_disgusted = 0;
@@ -60,17 +60,22 @@ class Scratch3FaceDetectionBlocks {
         //this.expressions_surprised = 0;
 
 
+        
+
         const that = this;
+
         this.socket = io('http://192.168.42.124:3000/');
+
         this.socket.on('detection', function (msg) {
             if (typeof (msg) === 'string') {
                 msg = JSON.parse(msg);
             }
-            
+
             if (msg || msg.detection || msg.detection._box || msg.player) {
   
                   that.position_x = -((msg.detection._box._x - 230) * 0.85);
-                 that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
+                  that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
+
 
                 if (msg.player === 1) {
                     that.position_x_1 = msg.detection._box._x;
@@ -91,6 +96,7 @@ class Scratch3FaceDetectionBlocks {
                 //that.expressions_surprised = msg.expressions.surprised;
                 console.log(msg.expressions.happy1);
 
+
             }
         });
     }
@@ -106,6 +112,7 @@ class Scratch3FaceDetectionBlocks {
             showStatusButton: true,
             blocks: [
                 {
+
                     opcode: 'positionX',
                     text: formatMessage({
                         id: 'faceDetection.position_x',
@@ -189,50 +196,16 @@ class Scratch3FaceDetectionBlocks {
                  },
                  {
                     opcode: 'disgusted',
+
                     text: formatMessage({
-                        id: 'faceDetection.expressions_disgusted',
-                        default: 'Disgusted',
-                        description: 'Disgusted'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
-                {
-                    opcode: 'fearful',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_fearful',
-                        default: 'Fearful',
-                        description: 'Fearful'
+                        id: 'faceDetection.position_x_1',
+                        default: 'Face Detection position_x_1',
+                        description: 'x-position of the detected face with the id = 1'
                     }),
                     blockType: BlockType.REPORTER,
                 },
                 
-                {
-                    opcode: 'neutral',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_neutral',
-                        default: 'Neutral',
-                        description: 'Neutral'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
-                {
-                    opcode: 'sad',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_sad',
-                        default: 'Sad',
-                        description: 'Sad'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
-                {
-                    opcode: 'surprised',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_surprised',
-                        default: 'Surprised',
-                        description: 'Surprised'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },*/
+                */
             ]
         };
     }
@@ -242,6 +215,7 @@ class Scratch3FaceDetectionBlocks {
      * @param {object} args - the block's arguments.
      * @return {boolean} - true if the button is pressed.
      */
+
     positionX(args){
         return this.position_x;
     }
@@ -250,17 +224,21 @@ class Scratch3FaceDetectionBlocks {
     }
     
     x1(args){
+
         return this.position_x_1;
     }
-    y1(args){
+    y1(args) {
         return this.position_y_1;
     }
+
     x2(args){
+
         return this.position_x_2;
     }
-    y2(args){
+    y2(args) {
         return this.position_y_2;
     }
+
     happy1(args){
         return this.expressions_happy1;
     }
@@ -286,6 +264,8 @@ class Scratch3FaceDetectionBlocks {
     surprised(args){
         return this.expressions_surprised;
     }*/
+
+    
 }
 
 module.exports = Scratch3FaceDetectionBlocks;

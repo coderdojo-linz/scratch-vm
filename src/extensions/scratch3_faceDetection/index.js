@@ -1,4 +1,3 @@
-module.exports = Scratch3FaceDetectionBlocks;
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
 const log = require('../../util/log');

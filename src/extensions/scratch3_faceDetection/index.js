@@ -1,3 +1,4 @@
+module.exports = Scratch3FaceDetectionBlocks;
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
 const log = require('../../util/log');
@@ -41,34 +42,37 @@ class Scratch3FaceDetectionBlocks {
          */
         this.runtime = runtime;
 
-        this.position_x_1 = 0;
-        this.position_y_1 = 0;
-        this.expressions_happy_1 = 0;
+        this.position_x1 = 0;
+        this.position_y1 = 0; 
+        this.position_x2 = 0;
+        this.position_y2 = 0;
 
-        this.position_x_2 = 0;
-        this.position_y_2 = 0;
-        this.expressions_happy_2 = 0;
+        this.expressions_happy1 = 0;
+        this.expressions_happy2 = 0;
 
         const that = this;
-        this.socket = io('http://192.168.42.143:3000/');
+
+        this.socket = io('http://192.168.42.124:3000/');
+
         this.socket.on('detection', function (msg) {
             if (typeof (msg) === 'string') {
                 msg = JSON.parse(msg);
             }
-            console.log('uhawlök');
-            if (msg && msg.detection && msg.detection._box && msg.player) {
 
-                //that.position_x = -((msg.detection._box._x - 230) * 0.85);
-                //that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
+            if (msg || msg.detection || msg.detection._box || msg.player) {
+  
+                  that.position_x = -((msg.detection._box._x - 230) * 0.85);
+                  that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
+
 
                 if (msg.player === 1) {
-                    that.position_x_1 = msg.detection._box._x;
-                    that.position_y_1 = msg.detection._box._y;
-                    that.expressions_happy_1 = msg.expressions.happy;
-                } else {
-                    that.position_x_2 = msg.detection._box._x;
-                    that.position_y_2 = msg.detection._box._y;
-                    that.expressions_happy_2 = msg.expressions.happy;
+                    that.position_x1 = msg.detection._box._x;
+                    that.position_y1 = msg.detection._box._y;
+                    that.expressions_happy1 = msg.expressions.happy;
+                }   else {
+                    that.position_x2 = msg.detection._box._x;
+                    that.position_y2 = msg.detection._box._y;
+                    that.expressions_happy2 = msg.expressions.happy;
                 }
             }
         });
@@ -85,38 +89,47 @@ class Scratch3FaceDetectionBlocks {
             showStatusButton: true,
             blocks: [
                 {
-                    opcode: 'x1',
-                    text: formatMessage({
-                        id: 'faceDetection.position_x_1',
-                        default: 'Face Detection position_x_1',
-                        description: 'x-position of the detected face with the id = 1'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
-                {
-                    opcode: 'y1',
-                    text: formatMessage({
-                        id: 'faceDetection.position_y_1',
-                        default: 'Face Detection position_y_1',
-                        description: 'y-position of the detected face with the id = 1'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
-                {
-                    opcode: 'happy1',
-                    text: formatMessage({
-                        id: 'faceDetection.expressions_happy_1',
-                        default: 'Happy1',
-                        description: 'Happy1'
-                    }),
-                    blockType: BlockType.REPORTER,
-                },
 
+                    opcode: 'positionX',
+                    text: formatMessage({
+                        id: 'faceDetection.position_x',
+                        default: 'Face Detection position_x',
+                        description: 'x-position of the detected face'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
                 {
+                    opcode: 'positionY',
+                    text: formatMessage({
+                        id: 'faceDetection.position_y',
+                        default: 'Face Detection position_y',
+                        description: 'y-position of the detected face'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                     opcode: 'x1',
+                     text: formatMessage({
+                         id: 'faceDetection.position_x1',
+                         default: 'Face Detection position_x1',
+                         description: 'x-position of the detected face with the id = 1'
+                     }),
+                     blockType: BlockType.REPORTER,
+                 },
+                 {
+                     opcode: 'y1',
+                     text: formatMessage({
+                         id: 'faceDetection.position_y1',
+                         default: 'Face Detection position_y1',
+                         description: 'y-position of the detected face with the id = 1'
+                     }),
+                     blockType: BlockType.REPORTER,
+                 },
+                 {
                     opcode: 'x2',
                     text: formatMessage({
-                        id: 'faceDetection.position_x_2',
-                        default: 'Face Detection position_x_2',
+                        id: 'faceDetection.position_x2',
+                        default: 'Face Detection position_x2',
                         description: 'x-position of the detected face with the id = 2'
                     }),
                     blockType: BlockType.REPORTER,
@@ -124,21 +137,30 @@ class Scratch3FaceDetectionBlocks {
                 {
                     opcode: 'y2',
                     text: formatMessage({
-                        id: 'faceDetection.position_y_2',
-                        default: 'Face Detection position_y_2',
+                        id: 'faceDetection.position_y2',
+                        default: 'Face Detection position_y2',
                         description: 'y-position of the detected face with the id = 2'
+                    }),
+                    blockType: BlockType.REPORTER,
+                },
+                {
+                    opcode: 'happy1',
+                    text: formatMessage({
+                        id: 'faceDetection.expressions_happy1',
+                        default: 'Happy1',
+                        description: 'Happy'
                     }),
                     blockType: BlockType.REPORTER,
                 },
                 {
                     opcode: 'happy2',
                     text: formatMessage({
-                        id: 'faceDetection.expressions_happy_2',
+                        id: 'faceDetection.expressions_happy2',
                         default: 'Happy2',
-                        description: 'Happy2'
+                        description: 'Happy'
                     }),
                     blockType: BlockType.REPORTER,
-                }
+                },
             ]
         };
     }
@@ -148,25 +170,36 @@ class Scratch3FaceDetectionBlocks {
      * @param {object} args - the block's arguments.
      * @return {boolean} - true if the button is pressed.
      */
-    x1(args) {
-        return this.position_x_1;
+
+    positionX(args){
+        return this.position_x;
+    }
+    positionY(args){
+        return this.position_y;
+    }
+    
+    x1(args){
+
+        return this.position_x1;
     }
     y1(args) {
-        return this.position_y_1;
-    }
-    happy1(args) {
-        return this.expressions_happy_1;
+        return this.position_y1;
     }
 
-    x2(args) {
-        return this.position_x_2;
+    x2(args){
+
+        return this.position_x2;
     }
     y2(args) {
-        return this.position_y_2;
+        return this.position_y2;
     }
-    happy2(args) {
-        return this.expressions_happy_2;
+
+    happy1(args){
+        return this.expressions_happy1;
     }
+    happy2(args){
+        return this.expressions_happy2;
+    }   
 }
 
 module.exports = Scratch3FaceDetectionBlocks;

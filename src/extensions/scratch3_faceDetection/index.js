@@ -43,7 +43,7 @@ class Scratch3FaceDetectionBlocks {
         this.runtime = runtime;
 
         this.position_x1 = 0;
-        this.position_y1 = 0; 
+        this.position_y1 = 0;
         this.position_x2 = 0;
         this.position_y2 = 0;
 
@@ -52,7 +52,13 @@ class Scratch3FaceDetectionBlocks {
 
         const that = this;
 
-        this.socket = io('http://192.168.42.124:3000/');
+        let wsUrl;
+        if (document.location.href.indexOf('.azurewebsites.net') !== -1) {
+            wsUrl = 'https://facedetectionbackend.azurewebsites.net/';
+        } else {
+            wsUrl = 'http://192.168.42.124:3000/';
+        }
+        this.socket = io(wsUrl);
 
         this.socket.on('detection', function (msg) {
             if (typeof (msg) === 'string') {
@@ -60,7 +66,7 @@ class Scratch3FaceDetectionBlocks {
             }
 
             if (msg || msg.detection || msg.detection._box || msg.player) {
-  
+
                   that.position_x = -((msg.detection._box._x - 230) * 0.85);
                   that.position_y = ((-msg.detection._box._y) + 100) * 1.25;
 
@@ -177,7 +183,7 @@ class Scratch3FaceDetectionBlocks {
     positionY(args){
         return this.position_y;
     }
-    
+
     x1(args){
 
         return this.position_x1;
@@ -199,7 +205,7 @@ class Scratch3FaceDetectionBlocks {
     }
     happy2(args){
         return this.expressions_happy2;
-    }   
+    }
 }
 
 module.exports = Scratch3FaceDetectionBlocks;

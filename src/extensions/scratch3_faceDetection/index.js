@@ -66,7 +66,7 @@ class Scratch3FaceDetectionBlocks {
             if (typeof (msg) === 'string') {
                 msg = JSON.parse(msg);
             }
-            console.log('uhawlök');
+            
             if (msg || msg.detection || msg.detection._box || msg.player) {
   
                   that.position_x = -((msg.detection._box._x - 230) * 0.85);
@@ -89,7 +89,7 @@ class Scratch3FaceDetectionBlocks {
                 
                 
                 //that.expressions_surprised = msg.expressions.surprised;
-                console.log(msg.expressions.neutral);
+                console.log(msg.expressions.happy1);
 
             }
         });
